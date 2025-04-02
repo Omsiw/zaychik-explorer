@@ -1,6 +1,14 @@
-# Dockerfile для backend (Spring Boot)
 FROM openjdk:17-jdk-slim
-VOLUME /tmp
+
+# Устанавливаем postgresql-client для pg_isready
+RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
-COPY target/*.jar app.jar
-ENTRYPOINT ["java","-jar","app.jar"]
+
+COPY wait-for-postgres.sh .
+COPY target/backend-0.0.1-SNAPSHOT.jar app.jar
+
+RUN chmod +x wait-for-postgres.sh
+
+ENTRYPOINT ["./wait-for-postgres.sh"]
+CMD ["java", "-jar", "app.jar"]
