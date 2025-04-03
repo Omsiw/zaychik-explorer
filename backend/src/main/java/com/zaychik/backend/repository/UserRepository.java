@@ -1,4 +1,4 @@
-package com.zaychik.backend;
+package com.zaychik.backend.repository;
 
 import com.zaychik.backend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;

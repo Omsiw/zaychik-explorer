@@ -1,5 +1,6 @@
 package com.zaychik.backend;
 
+import com.zaychik.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

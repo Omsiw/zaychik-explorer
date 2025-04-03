@@ -1,6 +1,6 @@
 package com.zaychik.backend.auth;
 
-import com.zaychik.backend.UserRepository;
+import com.zaychik.backend.repository.UserRepository;
 import com.zaychik.backend.auth.dto.AuthRequest;
 import com.zaychik.backend.auth.dto.AuthResponse;
 import com.zaychik.backend.auth.dto.RegisterRequest;
