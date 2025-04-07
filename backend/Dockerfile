@@ -7,6 +7,7 @@ WORKDIR /app
 
 COPY wait-for-postgres.sh .
 COPY target/backend-0.0.1-SNAPSHOT.jar app.jar
+COPY src/main/resources/application.yml ./application.yml
 
 RUN chmod +x wait-for-postgres.sh
 
