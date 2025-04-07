@@ -33,11 +33,10 @@ services:
       context: ./frontend
     container_name: zaychik_frontend
     ports:
-      - "3000:3000"
-    command: [ "npm", "run", "dev", "--", "--host" ]
+      - "3000:3000"  # ✅ Vite по умолчанию слушает порт 3000
+    command: [ "npm", "run", "dev" ]
     depends_on:
       - backend
-
 
   pgadmin:
     image: dpage/pgadmin4
