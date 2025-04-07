@@ -3,6 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+RUN chmod -R 777 node_modules
 RUN npm run build
 
 FROM nginx:alpine

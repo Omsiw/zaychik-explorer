@@ -1,4 +1,0 @@
-package com.zaychik.backend.security;
-
-public class JwtFilter {
-}
