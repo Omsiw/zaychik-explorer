@@ -1,17 +1,18 @@
-// src/components/Navbar.jsx
 import { Link } from "react-router-dom";
+import logo from "../assets/images/logo.png";
 
 function Navbar() {
   return (
-    <nav>
-      <ul>
-        <li><Link to="/">🏠 Главная</Link></li>
-        <li><Link to="/login">🔐 Вход</Link></li>
-        <li><Link to="/register">📝 Регистрация</Link></li>
-        <li><Link to="/profile">👤 Профиль</Link></li>
-        <li><Link to="/map">🗺️ Карта</Link></li>
-      </ul>
-    </nav>
+    <div className="navbar">
+      <div className="navbar-left">
+        <img src={logo} alt="Logo" className="navbar-logo" />
+        <span className="navbar-brand">Zaychik.KZ</span>
+      </div>
+      <div className="navbar-links">
+        <Link to="/profile">Мой заяц</Link>
+        <Link to="/map">Карта</Link>
+      </div>
+    </div>
   );
 }
 

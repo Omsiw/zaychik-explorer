@@ -24,6 +24,7 @@ public class AuthService {
     private JwtUtil jwtUtil;
 
     public String register(RegisterRequest request) {
+        System.out.println(">> register called with: " + request);
         if (playerRepository.findByUsername(request.getUsername()).isPresent()) {
             throw new RuntimeException("Username already taken");
         }

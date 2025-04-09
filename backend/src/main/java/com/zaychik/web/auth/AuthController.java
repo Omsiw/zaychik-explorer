@@ -1,6 +1,5 @@
 package com.zaychik.web.auth;
 
-import lombok.RequiredArgsConstructor;
 
 import java.util.Collections;
 
@@ -9,10 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.zaychik.backend.player.jwt.JwtUtil;
 import com.zaychik.backend.player.service.AuthService;
@@ -21,6 +17,8 @@ import com.zaychik.web.auth.dto.AuthRequest;
 import com.zaychik.web.auth.dto.AuthResponse;
 import com.zaychik.web.auth.dto.RegisterRequest;
 
+
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -39,9 +37,16 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        String token = authService.register(request);
-        return ResponseEntity.ok(Collections.singletonMap("token", token));
+        try {
+            System.out.println(">> Register request: " + request.getUsername());
+            String token = authService.register(request);
+            return ResponseEntity.ok(Collections.singletonMap("token", token));
+        } catch (Exception e) {
+            e.printStackTrace(); // <== пусть хоть что-то скажет
+            return ResponseEntity.status(500).body("Ошибка регистрации: " + e.getMessage());
+        }
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {

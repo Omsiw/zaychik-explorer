@@ -37,6 +37,9 @@ services:
     command: [ "npm", "run", "dev", "--", "--host" ]
     depends_on:
       - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
 
 
   pgadmin:

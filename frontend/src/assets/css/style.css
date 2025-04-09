@@ -1,9 +1,132 @@
-/* src/pages/HomePage.css */
-.home-container {
+/* ================== Общие настройки ================== */
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+}
+
+/* ================== Navbar ================== */
+/* Navbar: фикс, выравнивание, отступы */
+.navbar {
+  width: 100%;
+  max-width: 100%;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  position: fixed; /* если хочешь "прилипший" наверх */
+  top: 0;
+  left: 0;
+  z-index: 999;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  background-color: #C70039;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+}
+
+.navbar-brand {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  font-weight: 500;
+  color: white;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.navbar-links a:hover {
+  color: #C70039;
+}
+
+.page-content {
+  flex: 1;
+  padding: 120px 20px 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ================== Auth (Login/Register) ================== */
+.auth-form {
+  background-color: #fff;
+  padding: 2rem 3rem;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-form h2 {
   text-align: center;
-  padding: 40px;
-  font-family: 'Arial', sans-serif;
-  background-color: #f7f7f7;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.auth-form input {
+  padding: 0.75rem 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.auth-form button {
+  padding: 0.75rem;
+  background-color: #4a90e2;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.auth-form button:hover {
+  background-color: #357ab8;
+}
+
+/* ================== Главная страница ================== */
+.home-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.bunny-logo img {
+  width: 300px;
+  max-width: 90vw;
+  border-radius: 12px;
+  margin-bottom: 10px;
 }
 
 .home-title {
@@ -13,21 +136,27 @@
 
 .home-buttons {
   display: flex;
-  justify-content: center;
   gap: 20px;
 }
 
-.home-button {
-  padding: 10px 20px;
+.home-buttons button {
+  padding: 12px 24px;
   font-size: 1.1rem;
-  background-color: #0077cc;
+  background-color: #C70039;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.3s ease;
 }
 
-.home-button:hover {
-  background-color: #005fa3;
+.home-buttons button:hover {
+  background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+}
+
+/* ================== Footer-текст ================== */
+.sm-text {
+  font-size: 12px;
+  margin-top: 40px;
+  text-align: center;
 }
