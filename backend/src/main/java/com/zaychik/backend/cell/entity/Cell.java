@@ -6,7 +6,7 @@ import com.zaychik.backend.match.entity.Match;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.Id;
 
 @Entity
 @Data
@@ -25,6 +25,12 @@ public class Cell {
     @ManyToOne
     @JoinColumn(name = "cell_type_id")
     private CellType cellType;
+
+    public Cell(Integer cellNum, CellType cellType, Match match) {
+        this.cellNum = cellNum;
+        this.cellType = cellType;
+        this.match = match;
+    }
 
     @Deprecated
     protected Cell(){

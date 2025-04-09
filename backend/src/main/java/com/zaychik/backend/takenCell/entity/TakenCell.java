@@ -1,4 +1,4 @@
-package com.zaychik.backend.takenCell.model;
+package com.zaychik.backend.takenCell.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

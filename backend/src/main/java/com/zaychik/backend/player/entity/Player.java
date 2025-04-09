@@ -1,7 +1,7 @@
 package com.zaychik.backend.player.entity;
 import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import com.zaychik.backend.cell.entity.Cell;
-import com.zaychik.backend.status.model.Status;
+import com.zaychik.backend.status.entity.Status;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Data;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.Id;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
