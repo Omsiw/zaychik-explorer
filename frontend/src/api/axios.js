@@ -1,9 +1,7 @@
-// src/api/axios.js
-import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL + '/auth';
 
-const api = axios.create({
-  baseURL: "http://localhost:8080/api",
-  withCredentials: true,
-});
-
-export default api;
+export const register = async (userData) => {
+  const response = await axios.post(`${API_URL}/register`, userData);
+  localStorage.setItem('token', response.data.token);
+  return response.data;
+};

@@ -29,4 +29,6 @@ public class MovementHistory {
     @ManyToOne
     @JoinColumn(name = "new_cell_id")
     private Cell newCell;
+
+
 }

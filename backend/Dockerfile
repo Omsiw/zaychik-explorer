@@ -11,5 +11,5 @@ COPY src/main/resources/application.yml ./application.yml
 
 RUN chmod +x wait-for-postgres.sh
 
-ENTRYPOINT ["./wait-for-postgres.sh"]
+ENTRYPOINT ["sh", "./wait-for-postgres.sh"]
 CMD ["java", "-jar", "app.jar"]
