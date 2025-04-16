@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 
 function Navbar() {
+  const matchId = localStorage.getItem('matchId');
+
   return (
     <div className="navbar">
       <div className="navbar-left">
@@ -10,7 +12,7 @@ function Navbar() {
       </div>
       <div className="navbar-links">
         <Link to="/profile">Мой заяц</Link>
-        <Link to="/map">Карта</Link>
+        {matchId && <Link to={`/match/${matchId}`}>Карта</Link>}
       </div>
     </div>
   );

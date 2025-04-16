@@ -1,4 +1,4 @@
-import HomePage from './pages/HomePage';
+ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
@@ -16,7 +16,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/map" element={<MapPage />} />
+        <Route path="/match/:matchId" element={<MapPage />} />
       </Routes>
     </>
   );

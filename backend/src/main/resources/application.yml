@@ -5,8 +5,16 @@ spring:
     password: postgres
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: update # Важно! Используем create-drop для первого запуска
     show-sql: true
     properties:
+      jakarta:
+        persistence:
+          exclude-unlisted-classes: true
       hibernate:
+        archiver:
+          scanner:
+            excludes: java.**,javax.**,jakarta.**
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jakarta.persistence.schema-generation.database.action: none

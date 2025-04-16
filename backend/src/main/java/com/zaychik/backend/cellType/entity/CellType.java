@@ -18,4 +18,6 @@ public class CellType {
     private Long id;
 
     private String type;
+
+    private Double movementCost;
 }

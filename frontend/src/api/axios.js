@@ -1,7 +1,16 @@
-const API_URL = import.meta.env.VITE_API_URL + '/auth';
 
-export const register = async (userData) => {
-  const response = await axios.post(`${API_URL}/register`, userData);
-  localStorage.setItem('token', response.data.token);
-  return response.data;
-};
+import axios from 'axios';
+
+const instance = axios.create({
+  baseURL: 'http://localhost:8080',
+});
+
+instance.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export default instance;

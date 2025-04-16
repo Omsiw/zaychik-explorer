@@ -1,9 +1,8 @@
 package com.zaychik.backend.cell.entity;
 
-
-
 import com.zaychik.backend.cellType.entity.CellType;
 import com.zaychik.backend.match.entity.Match;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
