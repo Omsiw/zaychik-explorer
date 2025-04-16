@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.Id;
 
 import com.zaychik.backend.cell.entity.Cell;
-import com.zaychik.backend.player.entity.Player;
+import com.zaychik.backend.user.entity.User;
 
 @Entity
 @Data
@@ -20,7 +20,7 @@ public class MovementHistory {
 
     @ManyToOne
     @JoinColumn(name = "player_id")
-    private Player player;
+    private User player;
 
     @ManyToOne
     @JoinColumn(name = "last_cell_id")
@@ -29,6 +29,4 @@ public class MovementHistory {
     @ManyToOne
     @JoinColumn(name = "new_cell_id")
     private Cell newCell;
-
-
 }
