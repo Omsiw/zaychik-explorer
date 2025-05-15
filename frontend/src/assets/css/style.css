@@ -7,8 +7,6 @@ body, html, #root {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-image: url('http://localhost:3000/src/assets/images/root.png');
-  background-size: cover;
 
 }
 
@@ -21,14 +19,14 @@ body, html, #root {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: fixed;
-  color: white;
+  background-color: white;
+  position: fixed; /* если хочешь "прилипший" наверх */
   top: 0;
   left: 0;
   z-index: 999;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   box-sizing: border-box;
-  background-color: #6ba5e9;
+  background-color: #C70039;
 }
 
 .navbar-left {
@@ -46,7 +44,7 @@ body, html, #root {
 .navbar-brand {
   font-size: 20px;
   font-weight: bold;
-  color: #ffffff;;
+  color: white;
 }
 
 .navbar-links {
@@ -58,7 +56,7 @@ body, html, #root {
 .navbar-links a {
   text-decoration: none;
   font-weight: 500;
-  color: #101b2a;
+  color: white;
   font-size: 1rem;
   transition: color 0.3s ease;
 }
@@ -103,7 +101,7 @@ body, html, #root {
 
 .auth-form button {
   padding: 0.75rem;
-  background-color: #101b2a;
+  background-color: #4a90e2;
   border: none;
   color: white;
   font-size: 1rem;
@@ -113,20 +111,15 @@ body, html, #root {
 }
 
 .auth-form button:hover {
-  background-color: #00fec7;
-  color: #101b2a;
+  background-color: #357ab8;
 }
 
 /* ================== Главная страница ================== */
 .home-page {
-    display: flex;
-    text-align: center;
-    background-color: #0000002b;
-    flex-direction: column;
-    align-items: center;
-    margin: 121px;
-    padding: 20px;
-    border-radius: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .bunny-logo img {
@@ -149,7 +142,7 @@ body, html, #root {
 .home-buttons button {
   padding: 12px 24px;
   font-size: 1.1rem;
-  background-color: #101b2a;
+  background-color: #C70039;
   color: white;
   border: none;
   border-radius: 8px;
@@ -166,174 +159,4 @@ body, html, #root {
   font-size: 12px;
   margin-top: 40px;
   text-align: center;
-}
-
-
-.profile-container {
-  max-width: 500px;
-  margin: 60px auto;
-  padding: 40px;
-  background: #101b2a;
-  border-radius: 12px;
-  box-shadow: 0 0 30px rgba(0, 255, 191, 0.2);
-  color: #fff;
-  text-align: center;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.profile-title {
-  font-size: 2rem;
-  margin-bottom: 10px;
-  color: #00ffc8;
-}
-
-.profile-welcome {
-  font-size: 1.2rem;
-  margin-bottom: 30px;
-  color: #ccc;
-}
-
-.play-button {
-  padding: 14px 30px;
-  font-size: 1rem;
-  font-weight: bold;
-  background-color: #00ffc8;
-  color: #101b2a;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.play-button:hover {
-  background-color: #0cf8b8;
-}
-
-.play-button:disabled {
-  background-color: #888;
-  cursor: not-allowed;
-}
-
-.profile-content {
-  display: flex;
-  align-items: center;
-  gap: 60px;
-  position: relative;
-}
-
-.profile-bunny {
-  width: 250px;
-  animation: float 2.5s ease-in-out infinite;
-  transition: transform 0.3s;
-}
-
-
-.profile-card {
-  background-color: #0a1f2e;
-  padding: 40px 60px;
-  border-radius: 15px;
-  color: #00f5c0;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-.play-button {
-  margin-top: 20px;
-  padding: 12px 25px;
-  font-size: 16px;
-  border: none;
-  border-radius: 8px;
-  background-color: #00f5c0;
-  color: #0a1f2e;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.play-button:hover {
-  background-color: #00d4a6;
-}
-/* ========== ОБЁРТКА ДЛЯ КАРТЫ ========== */
-.map-container {
-  text-align: center;
-  padding: 100px 20px 40px;
-}
-
-/* контейнер страницы */
-.map-page {
-  padding: 20px;
-  text-align: center;
-}
-
-/* Таймер и статистика */
-.map-page h2,
-.map-page p {
-  margin: 8px 0;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.grid-10x10 {
-  display: grid;
-  grid-template-columns: repeat(10, 40px);
-  grid-template-rows: repeat(10, 40px);
-  gap: 2px;
-  justify-content: center;
-  margin: 20px auto;
-}
-
-.cell {
-  width: 40px;
-  height: 40px;
-  background: #f5f5f5;
-  border: 1px solid #aaa;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.cell.taken {
-  background-color: #d4f6d1;
-}
-
-.cell.current {
-  border: 2px solid gold;
-}
-
-.cell.capturing {
-  background-color: lightblue;
-}
-
-.bunny {
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  top: 5px;
-}
-
-.check {
-  position: absolute;
-  bottom: 2px;
-  right: 2px;
-  font-size: 16px;
-  color: green;
-}
-
-.progress-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 4px;
-  background-color: green;
-  animation: capture linear forwards;
-  width: 100%;
-}
-
-@keyframes capture {
-  from {
-    width: 0%;
-  }
-  to {
-    width: 100%;
-  }
 }
