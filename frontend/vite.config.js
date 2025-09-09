@@ -7,4 +7,11 @@ export default defineConfig({
     host: true,
     port: 3000,
   },
+  // --- НАЧАЛО ИЗМЕНЕНИЙ ---
+  // Этот блок решает проблему "global is not defined"
+  // для таких библиотек, как sockjs-client
+  define: {
+    'global': {},
+  }
+  // --- КОНЕЦ ИЗМЕНЕНИЙ ---
 })

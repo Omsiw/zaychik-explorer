@@ -67,7 +67,7 @@ public class TakenCellService {
 
         TakenCell takenCell = new TakenCell();
         takenCell.setCell(cell);
-        takenCell.setPlayer(currentUser);
+        takenCell.setUser(currentUser);
         takenCellRepository.save(takenCell);
     
 
@@ -88,7 +88,7 @@ public class TakenCellService {
     @Cacheable("adjacentCells")
     private List<Cell> findAdjacentCells3x3(Cell centerCell) {
         int centerNum = centerCell.getCellNum();
-        int centerX = centerNum % 10; // Предполагаем сетку 10x10
+        int centerX = centerNum % 10; 
         int centerY = centerNum / 10;
 
         int minX = Math.max(0, centerX - 1);

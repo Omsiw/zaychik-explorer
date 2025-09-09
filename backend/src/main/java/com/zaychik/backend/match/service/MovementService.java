@@ -26,37 +26,30 @@ public class MovementService {
 
     @Transactional
     public CellResponse moveToCell(User user, MoveRequest request) {
-        // Получаем текущую клетку игрока
 
         Cell currentCell = cellRepository.findByIdWithRelations(user.getCell().getId())
         .orElseThrow(() -> new IllegalStateException("Player cell not found"));
 
-        // Получаем матч
         Match match = matchRepository.findById(request.getMatchId())
                 .orElseThrow(() -> new IllegalArgumentException("Match not found"));
 
-        // Проверяем, что игрок находится в этом матче
         if (!currentCell.getMatch().getId().equals(match.getId())) {
             throw new IllegalArgumentException("Player is not in this match");
         }
 
-        // Находим целевую клетку по номеру и матчу
         Cell targetCell = cellRepository.findByCellNumAndMatch(request.getTargetCellNum(), match)
                 .orElseThrow(() -> new IllegalArgumentException("Target cell not found"));
 
-        // Проверяем, что клетки соседние
         if (!isAdjacent(currentCell, targetCell)) {
             throw new IllegalArgumentException("Cells must be adjacent");
         }
 
-        // Сохраняем историю перемещения
         MovementHistory history = new MovementHistory();
-        history.setPlayer(user);
+        history.setUser(user);
         history.setLastCell(currentCell);
         history.setNewCell(targetCell);
         movementHistoryRepository.save(history);
 
-        // Обновляем позицию игрока
         user.setCell(targetCell);
         userRepository.save(user);
 
@@ -64,8 +57,7 @@ public class MovementService {
     }
 
     private boolean isAdjacent(Cell cell1, Cell cell2) {
-        // Реализация проверки соседства
         int diff = Math.abs(cell1.getCellNum() - cell2.getCellNum());
-        return diff == 1 || diff == 10; // Для сетки 10x10
+        return diff == 1 || diff == 10; 
     }
 }

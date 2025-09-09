@@ -1,191 +1,187 @@
-import React, { useEffect, useState } from 'react';
-import axios from '../api/axios';
-
-const CAPTURE_TIMES = {
-  'Горы': 15,
-  'Лес': 12,
-  'Вода': 17,
-  'Пески': 13,
-  'Поле': 10,
-};
+import React, { useEffect, useState, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
+import { socketService } from '../services/socketService';
+import { jwtDecode } from 'jwt-decode';
+import axios from '../api/axios'; 
+import { takeCellAction, moveToAction } from '../services/matchService'; 
+import bunnyImage from '../assets/images/bunny.png';
+import enemyImage from '../assets/images/enemy.png';
 
 const TYPE_ICONS = {
-  'Горы': '/src/assets/icons/1.png',
-  'Лес': '/src/assets/icons/2.png',
-  'Вода': '/src/assets/icons/3.png',
-  'Пески': '/src/assets/icons/4.png',
-  'Поле': '/src/assets/icons/5.png',
+    'Равнина': '/src/assets/icons/5.png',
+    'Лес': '/src/assets/icons/2.png',
+    'Горы': '/src/assets/icons/1.png',
+    'Болото': '/src/assets/icons/4.png',
+    'Вода': '/src/assets/icons/3.png',
 };
 
 function MapPage() {
-  const matchId = parseInt(localStorage.getItem('matchId'));
-  const startCellId = parseInt(localStorage.getItem('startCellId'));
-
-  const [currentCellId, setCurrentCellId] = useState(null);
-  const [adjacentCells, setAdjacentCells] = useState([]);
+    const { matchId } = useParams();
+    const [myUserId, setMyUserId] = useState(null);
+    const [myPosition, setMyPosition] = useState(null);
+    const [timer, setTimer] = useState(0);
+    const [cellMap, setCellMap] = useState({});
   const [capturing, setCapturing] = useState(false);
-  const [timer, setTimer] = useState(0);
-  const [gameTime, setGameTime] = useState(600);
-  const [takenCells, setTakenCells] = useState([]);
-  const [cellMap, setCellMap] = useState({});
-  const [gameOver, setGameOver] = useState(false);
+    const [enemies, setEnemies] = useState([])
+    const [takenCells, setTakenCells] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    takeStartCell();
+    //обновления карты
+    const getMap = useCallback(async () => {
+        try {
+            const obj = JSON.parse(localStorage.getItem('enemies'))
+            console.log(obj)
+            setEnemies(obj)
 
-    const gameInterval = setInterval(() => {
-      setGameTime(prev => {
-        if (prev <= 1) {
-          clearInterval(gameInterval);
-          setGameOver(true);
-          return 0;
+            const mapResponse = await axios.get(`/matches/${matchId}/cells`);
+            const cells = mapResponse.data;
+            console.log(cells)
+        
+            const takenCellsResponse = await axios.get('/action/taken');
+            const takenCells = takenCellsResponse.data;
+
+            const newMap = {};
+            cells.forEach(cell => {
+                newMap[cell.cellNum] = cell;
+            });
+
+            const storageCellNum = parseInt(localStorage.getItem('currentCellNum'), 10);
+            setCellMap(newMap);
+            setTakenCells(takenCells);
+            setMyPosition(storageCellNum);
+
+        } catch (error) {
+            console.error("Ошибка при загрузке карты:", error);
         }
-        return prev - 1;
-      });
-    }, 1000);
+    }, [matchId]);
 
-    return () => clearInterval(gameInterval);
-  }, []);
+    // WebSocket
+    useEffect(() => {
+        try {
+            const token = localStorage.getItem('token');
+            const userData = jwtDecode(token);
+            setMyUserId(parseInt(userData.userId, 10));
+        } catch (e) { console.error("Ошибка токена:", e); }
 
-  const takeStartCell = async () => {
-    try {
-      const response = await axios.post('/action/take', {
-        cellId: startCellId,
-        matchId,
-      });
+        getMap();
 
-      if (response.data.success) {
-        const { cellId, adjacentCells } = response.data;
-        setCurrentCellId(cellId);
-        setTakenCells([cellId]);
-        updateMap(adjacentCells);
-      } else {
-        alert(response.data.message);
-      }
-    } catch (err) {
-      console.error("Ошибка при старте:", err);
-    }
-  };
+        const handleGameEvent = (event) => {
+            console.log("Получено игровое событие:", event);
+            var lastEnemies = localStorage.getItem("enemies")
+            console.log(lastEnemies)
+            if (event.eventType === "MOVE") {
+                const updatedEnemies = enemies.map(enemy => {
+                    if (enemy.userId === event.userId) {
+                        return { ...enemy, cellNum: event.cellNum };
+                    }
+                    return enemy;
+                });
 
-  const updateMap = (adjCells) => {
-    const map = {};
-    adjCells.forEach(cell => {
-      map[cell.cellNum] = cell;
-    });
-    setCellMap(prev => ({ ...prev, ...map }));
-    setAdjacentCells(adjCells);
-  };
+                console.log("Старый массив врагов:", enemies);
+                console.log("Новый, обновленный массив:", updatedEnemies);
+                setEnemies(updatedEnemies)
 
-  const handleMove = async (cell) => {
-    if (capturing || gameTime <= 0) return;
+                localStorage.setItem("enemies", JSON.stringify(updatedEnemies));
+                console.log(enemies)
+            }
+            getMap(); 
+        };
 
-    const type = cell.cellType.type;
-    const captureTime = CAPTURE_TIMES[type] || 10;
-
-    setCapturing(true);
-    setTimer(captureTime);
-
-    const countdown = setInterval(() => {
-      setTimer(prev => {
-        if (prev <= 1) {
-          clearInterval(countdown);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    setTimeout(async () => {
-      try {
-        const response = await axios.post('/action/take', {
-          cellId: cell.id,
-          matchId,
+        socketService.connect(() => {
+            socketService.subscribe(`/topic/match/${matchId}`, handleGameEvent);
         });
 
-        if (response.data.success) {
-          const { cellId, adjacentCells } = response.data;
-          setCurrentCellId(cellId);
-          setTakenCells(prev => [...new Set([...prev, cellId])]);
-          updateMap(adjacentCells);
-        } else {
-          alert(response.data.message);
+        if (myUserId) {
+            getMap();
         }
-      } catch (err) {
-        alert("❌ Ошибка при захвате клетки");
-      } finally {
-        setCapturing(false);
-        setTimer(0);
-      }
-    }, captureTime * 1000);
-  };
 
-  const renderCell = (index) => {
-    const cell = cellMap[index];
-    const isTaken = takenCells.includes(index);
-    const isCurrent = currentCellId === index;
+        return () => socketService.disconnect();
+    }, [myUserId, matchId, getMap]);
 
-    const classes = ['cell'];
-    if (isTaken) classes.push('taken');
-    if (isCurrent) classes.push('current');
+    // Логика клика
+    const handleCellClick = async (clickedCell) => {
+        if (isLoading || !myPosition) return;
+        //const captureTime = clickedCell.cellType.movementCost * 10;
+
+        setIsLoading(true);
+        
+        // setCapturing(true); 
+        // setTimer(captureTime);
+        
+        // const countdown = setInterval(() => {
+        //     setTimer(prev => {
+        //         if (prev <= 1) {
+        //         clearInterval(countdown);
+        //         return 0;
+        //         }
+        //         return prev - 1;
+        //     });
+        // }, 1000);
+        
+        try {
+            const currentCell = cellMap[myPosition];
+
+            if (clickedCell.cellNum === myPosition) {
+                await takeCellAction(matchId, clickedCell.id);
+            } else {
+                const result = await moveToAction(matchId, clickedCell.cellNum);
+                console.log(result);
+                localStorage.setItem('currentCellNum', result.cellNum);
+            }
+        } catch (error) {
+            console.error("Ошибка при выполнении действия:", error);
+            alert(error.response?.data?.message || "Произошла ошибка");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Отрисовка клетки
+    const renderCell = (index) => {
+        const cell = cellMap[index];
+        if (!cell) return <div key={index} className="cell empty"></div>;
+
+        const userId = takenCells.takeByEnemy;
+        let cellClass = 'cell';
+        if (takenCells?.takenByUser?.some(c => c.id === cell.id)) {
+            cellClass = "taken-by-me";
+        } else if (takenCells?.takenByEnemy?.some(c => c.id === cell.id)) {
+            cellClass = "taken-by-enemy";
+        }
+        const isEnemyHere = enemies.some(enemy => enemy.cellNum === index);
+        
+        return (
+            <div 
+                key={index} 
+                className={cellClass} 
+                onClick={() => handleCellClick(cell)}
+                style={{ cursor: 'pointer' }}
+            >
+                <img src={TYPE_ICONS[cell.cellType.type]} alt={cell.cellType.type} className="terrain-icon" />
+                {myPosition === index && (
+                    <img src={bunnyImage} alt="Заяц" className="bunny-icon" />
+                )}
+                {isEnemyHere && (
+                    <img src={enemyImage} alt="Враг" className="bunny-icon enemy" />
+                )}
+            </div>
+        );
+    };
 
     return (
-      <div
-        key={index}
-        className={classes.join(' ')}
-        onClick={() => !capturing && cell && handleMove(cell)}
-        style={{ cursor: cell && !capturing ? 'pointer' : 'default' }}
-      >
-        {cell && (
-          <img
-            src={TYPE_ICONS[cell.cellType.type]}
-            alt={cell.cellType.type}
-            style={{ width: 30, height: 30 }}
-          />
-        )}
-        {isCurrent && (
-          <img
-            src="/src/assets/images/bunny.png"
-            alt="Заяц"
-            className="bunny"
-          />
-        )}
-      </div>
-    );
-  };
-
-  const capturedPercent = Math.round((takenCells.length / 100) * 100);
-
-  return (
-    <div className="map-container">
-      <h2>Карта матча</h2>
-
-      <p>⏱ Осталось: {Math.floor(gameTime / 60)}:{(gameTime % 60).toString().padStart(2, '0')}</p>
-
-      <div style={{ margin: '10px 0', width: '300px', background: '#eee', borderRadius: '6px' }}>
-        <div style={{
-          width: `${capturedPercent}%`,
-          height: '10px',
-          backgroundColor: '#6ba5e9',
-          borderRadius: '6px'
-        }}></div>
-      </div>
-      <p>🌍 Исследовано клеток: {takenCells.length} / 100 ({capturedPercent}%)</p>
-
-      <div className="grid-10x10">
-        {Array.from({ length: 100 }, (_, i) => renderCell(i))}
-      </div>
-
-      {capturing && (
-        <div className="capture-timer">⚔️ Захват клетки... Осталось {timer} сек</div>
-      )}
-
-      {gameOver && (
-        <div style={{ marginTop: 20, padding: 10, backgroundColor: '#fff3cd', border: '1px solid #ffecb5', borderRadius: 8 }}>
-          🎉 Игра завершена! Ты захватил {takenCells.length} клеток ({capturedPercent}% карты)!
+        <div className="map-container">
+            <h2>Карта матча #{matchId}</h2>
+            <div className="grid-10x10">
+                {Object.keys(cellMap).length > 0
+                    ? Array.from({ length: 100 }, (_, i) => renderCell(i))
+                    : <p>Загрузка карты...</p>
+                }
+            </div>
+            {capturing && (
+                <div className="capture-timer">⚔️ Захват клетки... Осталось {timer} сек</div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 }
 
 export default MapPage;

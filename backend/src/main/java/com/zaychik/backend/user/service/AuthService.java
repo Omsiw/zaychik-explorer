@@ -30,11 +30,9 @@ public class AuthService {
 
         UserCreationParams params2 = new UserCreationParams(request.getUsername(), passwordEncoder.encode(request.getPassword()), request.getEmail());
         User user = UserFactory.createUser(params2);
-        // можешь задать роль: user.setRole("ROLE_user");
 
         userRepository.save(user);
 
-        // Вернуть токен сразу после регистрации:
         return jwtUtil.generateToken(user);
     }
 }

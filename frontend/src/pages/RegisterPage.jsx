@@ -14,7 +14,7 @@ function RegisterPage() {
     e.preventDefault();
     try {
       await register(form);
-      navigate('/profile');
+      navigate('/login');
     } catch (err) {
       alert('Ошибка при регистрации');
     }

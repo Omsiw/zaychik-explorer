@@ -22,6 +22,6 @@ public class TakenCell {
     private Cell cell;
 
     @ManyToOne
-    @JoinColumn(name = "player_id")
-    private User player;
+    @JoinColumn(name = "user_id")
+    private User user;
 }

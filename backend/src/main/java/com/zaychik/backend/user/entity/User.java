@@ -6,6 +6,7 @@ import com.zaychik.backend.status.entity.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,8 +17,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Data
-@Table(name = "player")
+@Table(name = "users")
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

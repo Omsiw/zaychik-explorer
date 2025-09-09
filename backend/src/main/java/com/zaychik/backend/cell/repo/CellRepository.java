@@ -24,4 +24,5 @@ public interface CellRepository extends JpaRepository<Cell, Long> {
      List<Cell> findByCellNumInAndMatchWithRelations(
              @Param("cellNums") List<Integer> cellNums,
              @Param("matchId") Long matchId);
+    List<Cell> findByMatchId(Long matchId);
 }

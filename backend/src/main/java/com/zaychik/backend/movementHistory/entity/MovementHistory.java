@@ -19,8 +19,8 @@ public class MovementHistory {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "player_id")
-    private User player;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "last_cell_id")

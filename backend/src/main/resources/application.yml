@@ -18,3 +18,17 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
         jakarta.persistence.schema-generation.database.action: none
+logging:
+  level:    
+    org:
+      springframework:
+        web:
+          socket:
+            messaging: TRACE
+        messaging:
+          simp:
+            stomp: TRACE
+      hibernate:
+        type:
+          descriptor:
+            sql: TRACE
